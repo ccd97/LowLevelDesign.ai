@@ -18,6 +18,7 @@
   "build": {
     "appId": "com.lld.practice.harness",
     "productName": "LLD Practice",
+    "artifactName": "LowLevelDesign.ai-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "release"
     },
@@ -40,11 +41,11 @@
         }
       ],
       "icon": "public/icon.png",
-      "identity": null
+      "artifactName": "LowLevelDesign.ai-${version}-mac-${arch}.${ext}"
     },
     "dmg": {
       "title": "${productName} ${version}",
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "artifactName": "LowLevelDesign.ai-${version}-mac-${arch}.${ext}",
       "backgroundColor": "#1e1e2e",
       "contents": [
         {
@@ -68,13 +69,20 @@
         "AppImage",
         "tar.xz"
       ],
-      "category": "Development"
+      "category": "Development",
+      "artifactName": "LowLevelDesign.ai-${version}-linux-${arch}.${ext}"
     },
     "win": {
       "target": [
         "nsis",
         "portable"
       ]
+    },
+    "nsis": {
+      "artifactName": "LowLevelDesign.ai-${version}-win-setup.exe"
+    },
+    "portable": {
+      "artifactName": "LowLevelDesign.ai-${version}-win-portable.exe"
     }
   },
   "dependencies": {

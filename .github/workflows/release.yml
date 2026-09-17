@@ -1,0 +1,103 @@
+name: Build and Publish Release
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to attach binaries to (e.g. v1.2.0)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: macOS (ARM64 DMG)
+            build-script: npm run package:mac:arm64 -- --publish never
+            artifact-path: release/*.dmg
+            artifact-name: macos-artifacts
+
+          - os: ubuntu-latest
+            name: Linux (AppImage & tar.xz)
+            build-script: npm run package:linux -- --publish never
+            artifact-path: |
+              release/*.AppImage
+              release/*.tar.xz
+            artifact-name: linux-artifacts
+
+          - os: windows-latest
+            name: Windows (Setup Installer & Portable)
+            build-script: npm run package:win -- --publish never
+            artifact-path: release/*.exe
+            artifact-name: windows-artifacts
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and Package
+        run: ${{ matrix.build-script }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-path }}
+          if-no-files-found: error
+
+  publish:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+          merge-multiple: true
+
+      - name: Publish to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.inputs.tag_name || github.ref_name }}"
+          echo "Ensuring release exists for tag: $TAG"
+          gh release view "$TAG" || gh release create "$TAG" --title "Release $TAG" --generate-notes
+          
+          for file in all-artifacts/*; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              for attempt in {1..5}; do
+                gh release upload "$TAG" "$file" --clobber && break || {
+                  echo "Upload failed, retrying in 5 seconds (attempt $attempt)..."
+                  sleep 5
+                }
+              done
+            fi
+          done
