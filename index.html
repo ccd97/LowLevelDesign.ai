@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <meta name="author" content="Cyprien Dcunha" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://openrouter.ai https://formsubmit.co; worker-src 'self' blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline';" />
+    <title>LLD Practice</title>
+    <script>
+      // Electron-only: theme comes from main-process storage via preload.
+      (function() {
+        try {
+          var theme = (window.electronAPI && window.electronAPI.initialSettings && window.electronAPI.initialSettings.theme) || 'dark';
+          var root = document.documentElement;
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-100 dark:bg-[#18181b] text-slate-900 dark:text-[#f4f4f5] overflow-hidden select-none font-sans">
+    <div id="root" class="h-screen w-screen flex flex-col overflow-hidden"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

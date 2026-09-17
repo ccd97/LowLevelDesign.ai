@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="18 16 92 92" fill="none">
+  <defs>
+    <!-- Top Plane Gradient -->
+    <linearGradient id="topPlane" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+
+    <!-- Mid Plane Gradient -->
+    <linearGradient id="midPlane" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+
+    <!-- Base Plane Gradient -->
+    <linearGradient id="botPlane" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+
+    <!-- Subtle Ambient Glow -->
+    <filter id="themeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- LLD Architecture Mark (Pure symbol, no enclosing box) -->
+  <g filter="url(#themeGlow)">
+    <!-- Top Layer (Domain / Interface Contract) -->
+    <path d="M64 24 L96 42 L64 60 L32 42 Z" 
+          fill="url(#topPlane)" fill-opacity="0.25" 
+          stroke="url(#topPlane)" stroke-width="2.75" stroke-linejoin="round" />
+
+    <!-- Middle Layer (Service / Logic Layer) -->
+    <path d="M64 45 L96 63 L64 81 L32 63 Z" 
+          fill="url(#midPlane)" fill-opacity="0.2" 
+          stroke="url(#midPlane)" stroke-width="2.75" stroke-linejoin="round" />
+
+    <!-- Bottom Layer (Storage / Foundation) -->
+    <path d="M64 66 L96 84 L64 102 L32 84 Z" 
+          fill="url(#botPlane)" fill-opacity="0.25" 
+          stroke="url(#botPlane)" stroke-width="2.75" stroke-linejoin="round" />
+
+    <!-- Architecture Node Interconnections -->
+    <!-- Left Pipeline -->
+    <path d="M46 50 L46 70 L55 75" 
+          stroke="#38bdf8" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" />
+    <circle cx="46" cy="50" r="3" fill="#38bdf8" />
+    <circle cx="55" cy="75" r="2.5" fill="#818cf8" />
+
+    <!-- Central Backbone & Nodes -->
+    <line x1="64" y1="42" x2="64" y2="84" 
+          stroke="#38bdf8" stroke-width="2" stroke-dasharray="2 3" opacity="0.8" stroke-linecap="round" />
+    <circle cx="64" cy="42" r="3.25" fill="#38bdf8" />
+    <circle cx="64" cy="63" r="2.75" fill="#60a5fa" />
+    <circle cx="64" cy="84" r="3.25" fill="#c084fc" />
+
+    <!-- Right Pipeline -->
+    <path d="M82 52 L82 72 L73 77" 
+          stroke="#c084fc" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" />
+    <circle cx="82" cy="52" r="3" fill="#38bdf8" />
+    <circle cx="73" cy="77" r="2.5" fill="#c084fc" />
+  </g>
+</svg>

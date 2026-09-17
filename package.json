@@ -1,0 +1,116 @@
+{
+  "name": "lld-practice-harness",
+  "version": "1.2.0",
+  "description": "Desktop application for practicing Low-Level Design (LLD) with LLM integration",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "node node_modules/concurrently/dist/bin/concurrently.js -k \"node node_modules/vite/bin/vite.js\" \"node node_modules/wait-on/bin/wait-on tcp:5173 && node node_modules/electron/cli.js dist-electron/main.js\"",
+    "build": "node node_modules/typescript/bin/tsc && node node_modules/vite/bin/vite.js build && npm run build:electron",
+    "electron:dev": "node node_modules/concurrently/dist/bin/concurrently.js -k \"node node_modules/vite/bin/vite.js\" \"node node_modules/wait-on/bin/wait-on tcp:5173 && node node_modules/electron/cli.js dist-electron/main.js\"",
+    "build:electron": "node node_modules/typescript/bin/tsc -p electron/tsconfig.json",
+    "start": "node node_modules/electron/cli.js dist-electron/main.js",
+    "package:mac": "npm run build && node node_modules/electron-builder/out/cli/cli.js --mac dmg --universal",
+    "package:mac:arm64": "npm run build && node node_modules/electron-builder/out/cli/cli.js --mac dmg --arm64",
+    "package:mac:x64": "npm run build && node node_modules/electron-builder/out/cli/cli.js --mac dmg --x64",
+    "package:linux": "npm run build && node node_modules/electron-builder/out/cli/cli.js --linux",
+    "package:win": "npm run build && node node_modules/electron-builder/out/cli/cli.js --win"
+  },
+  "build": {
+    "appId": "com.lld.practice.harness",
+    "productName": "LLD Practice",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal",
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icon.png",
+      "identity": null
+    },
+    "dmg": {
+      "title": "${productName} ${version}",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "backgroundColor": "#1e1e2e",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "tar.xz"
+      ],
+      "category": "Development"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@types/prismjs": "^1.26.6",
+    "ansi-to-react": "^6.2.6",
+    "clipboard-copy": "^4.0.1",
+    "jsonrepair": "^3.15.0",
+    "lru-cache": "^11.5.2",
+    "lucide-react": "^1.16.0",
+    "mermaid": "^12.0.0",
+    "monaco-editor": "^0.52.2",
+    "openai": "^7.17.0",
+    "p-timeout": "^7.0.2",
+    "prismjs": "^1.30.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "react-resizable-panels": "^4.12.4",
+    "remark-gfm": "^4.0.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^34.3.0",
+    "electron-builder": "^26.15.3",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0",
+    "wait-on": "^8.0.3"
+  }
+}
